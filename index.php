@@ -1,3 +1,10 @@
+<?php
+require('config/config.php');
+     session_start();
+     if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
+       header('Location:login.php');
+     }
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,101 +30,38 @@
         </div><!-- /.container-fluid -->
         </section>
         <!-- Main content -->
+        <?php
+            $stmt=$db->prepare('SELECT * FROM posts ORDER BY id DESC');
+            $stmt->execute();
+            $result=$stmt->fetchALL();
+        ?>
+        
         <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-4">
-                    <!-- Box Comment -->
-                    <div class="card card-widget">
-                    <div class="card-header text-center">
-                        <h4>Blog Title</h4>
-                    </div>
-                    
-                    <div class="card-body">
-                        <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-                    </div>
-                    <!-- /.card-body -->
-                    
-                    </div>
-                    <!-- /.card -->
-                </div>
-                <div class="col-md-4">
-                    <!-- Box Comment -->
-                    <div class="card card-widget">
-                    <div class="card-header text-center">
-                        <h4>Blog Title</h4>
-                    </div>
-                    
-                    <div class="card-body">
-                        <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-                    </div>
-                    <!-- /.card-body -->
-                    
-                    </div>
-                    <!-- /.card -->
-                </div>
-                <div class="col-md-4">
-                    <!-- Box Comment -->
-                    <div class="card card-widget">
-                    <div class="card-header text-center">
-                        <h4>Blog Title</h4>
-                    </div>
-                    
-                    <div class="card-body">
-                        <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-                    </div>
-                    <!-- /.card-body -->
-                    
-                    </div>
-                    <!-- /.card -->
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <!-- Box Comment -->
-                    <div class="card card-widget">
-                    <div class="card-header text-center">
-                        <h4>Blog Title</h4>
-                    </div>
-                    
-                    <div class="card-body">
-                        <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-                    </div>
-                    <!-- /.card-body -->
-                    
-                    </div>
-                    <!-- /.card -->
-                </div>
-                <div class="col-md-4">
-                    <!-- Box Comment -->
-                    <div class="card card-widget">
-                    <div class="card-header text-center">
-                        <h4>Blog Title</h4>
-                    </div>
-                    
-                    <div class="card-body">
-                        <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-                    </div>
-                    <!-- /.card-body -->
-                    
-                    </div>
-                    <!-- /.card -->
-                </div>
-                <div class="col-md-4">
-                    <!-- Box Comment -->
-                    <div class="card card-widget">
-                    <div class="card-header text-center">
-                        <h4>Blog Title</h4>
-                    </div>
-                    
-                    <div class="card-body">
-                        <img class="img-fluid pad" src="dist/img/photo2.png" alt="Photo">
-                    </div>
-                    <!-- /.card-body -->
-                    
-                    </div>
-                    <!-- /.card -->
-                </div>
+            <?php
+                    if($result):
+                      $i=1;
+                      foreach($result as $value): ?>
+                        <div class="col-md-4">
+                            <div class="card card-widget">
+                                <div class="card-header text-center">
+                                    <h4><?= $value['title'] ?></h4>
+                                </div>
+                                
+                                <div class="card-body">
+                                    <a href="blog_detail.php?id=<?php echo $value['id']; ?>"><img  src="admin/<?= $value['image'] ?>" alt="Photo" style="width:100%;height:200px;object-fit:cover;"></a>   
+                               </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div> 
+                <?php
+                        $i++;
+                      endforeach;
+                    endif;
+                ?>
+                
             </div>
         </div><!-- /.container-fluid -->
         </section>
