@@ -8,7 +8,35 @@ require('config/config.php');
     $stmt=$db->prepare("SELECT * FROM posts WHERE id=".$_GET['id']);
     $stmt->execute();
     $result=$stmt->fetch();
-    // print_r($result['title']);
+    
+    $blogid=$_GET['id'];
+    $stmtcmt=$db->prepare("SELECT * FROM comments WHERE post_id=$blogid");
+    $stmtcmt->execute();
+    $cmResult=$stmtcmt->fetchAll();
+    if($cmResult){
+        $authorID=$cmResult[0]['author_id'];
+        $stmtuser=$db->prepare("SELECT * FROM users WHERE id=$authorID");
+        $stmtuser->execute();
+        $userResult=$stmtuser->fetchAll();
+    }
+    
+    // print_r($cmResult[0]['author_id']);
+    // exit();
+    
+
+    if($_POST){
+        $comment=$_POST['comment'];
+
+        $stmt=$db->prepare("INSERT INTO comments(content,author_id,post_id) VALUES (:content,:author_id,:post_id)");
+        $result=$stmt->execute([
+            ":content"=>$comment,
+            ":author_id"=>$_SESSION['user_id'],
+            ":post_id"=>$blogid,
+        ]);
+        if($result){
+            header('Location:blog_detail.php?id='.$blogid);
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -24,6 +52,8 @@ require('config/config.php');
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <!-- Custom style -->
+  <link rel="stylesheet" href="dist/css/style.css">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -31,7 +61,7 @@ require('config/config.php');
     <div class="wrapper">
         <!-- Main content -->
         <section class="content my-5">
-            <div class="container-fluid">
+            <div class="container">
                 <div class="row">
                     <div class="col-md-12">
                         <!-- Box Comment -->
@@ -43,48 +73,38 @@ require('config/config.php');
                                 <img class="img-fluid pad" src="admin/<?= $result['image'] ?>" alt="Photo">
                                 <p class="card-text"><?= $result['content']?></p>
                                 <h3>Comments</h3><hr>
+                                <a href="index.php" class="btn btn-default">Back</a>
                             </div>
                             
                             <!-- /.card-body -->
                             <div class="card-footer card-comments">
-                                <div class="card-comment">
-                                <!-- User image -->
-                                    <img class="img-circle img-sm" src="dist/img/user3-128x128.jpg" alt="User Image">
-
-                                    <div class="comment-text">
-                                        <span class="username">
-                                            Maria Gonzales
-                                        <span class="text-muted float-right">8:03 PM Today</span>
-                                        </span><!-- /.username -->
-                                        It is a long established fact that a reader will be distracted
-                                        by the readable content of a page when looking at its layout.
+                                <?php if($cmResult):
+                                     foreach($cmResult as $value): ?>
+                                    <div class="card-comment d-flex justify-content-between">
+                                        <div class="comment-text">
+                                            <i class="far fa-user"></i>
+                                            <span class="font-weight-bold ml-2 text-capitalize"><?= $userResult[0]['name'] ?>
+                                            </span><!-- /.username -->
+                                            <div style="margin-left:45px;">
+                                                <?= $value['content'] ?>
+                                            </div> 
+                                        </div>
+                                        <div class="text-muted datetime"><?= $value['created_at'] ?></div>
                                     </div>
-                                    <!-- /.comment-text -->
-                                </div>
-                                <!-- /.card-comment -->
-                                <div class="card-comment">
-                                <!-- User image -->
-                                    <img class="img-circle img-sm" src="dist/img/user4-128x128.jpg" alt="User Image">
-
-                                    <div class="comment-text">
-                                        <span class="username">
-                                        Luna Stark
-                                        <span class="text-muted float-right">8:03 PM Today</span>
-                                        </span><!-- /.username -->
-                                        It is a long established fact that a reader will be distracted
-                                        by the readable content of a page when looking at its layout.
-                                    </div>
-                                <!-- /.comment-text -->
-                                </div>
-                                <!-- /.card-comment -->
+                                <?php   endforeach;
+                                    else: ?>
+                                            <p class="alert alert-info">No Comment!</p>
+                            <?php   endif; ?>    
+                               
                             </div>
                             <div class="card-footer">
-                                <form action="#" method="post">
-                                <img class="img-fluid img-circle img-sm" src="dist/img/user4-128x128.jpg" alt="Alt Text">
-                                <!-- .img-push is used to add margin to elements next to floating images -->
-                                <div class="img-push">
-                                    <input type="text" class="form-control form-control-sm" placeholder="Press enter to post comment">
-                                </div>
+                                <form action="" method="post">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="far fa-user"></i></span>
+                                        </div>
+                                        <input type="text" name="comment" class="form-control " placeholder="Press enter to post comment">
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -92,13 +112,18 @@ require('config/config.php');
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
+            <a id="back-to-top" href="#" class="btn btn-primary back-to-top" role="button" aria-label="Scroll to top">
+                <i class="fas fa-chevron-up"></i>
+            </a>
         </section>
-        <footer class="main-footer" style="margin-left:0; !important">
-            <div class="float-right d-none d-sm-block">
-            <b>Version</b> 3.0.5
+        <footer class="main-footer mb-2" style="margin-left:0; !important">
+            <!-- To the right -->
+            <div class="container">
+                <div class="float-right d-none d-sm-inline">
+                    <a href="logout.php" class="btn btn-secondary">Logout</a>
+                </div>
+                <strong>Copyright &copy; 2022 <a href="#">A programmer</a>.</strong> All rights reserved.
             </div>
-            <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong> All rights
-            reserved.
         </footer>
     </div>
 <!-- jQuery -->

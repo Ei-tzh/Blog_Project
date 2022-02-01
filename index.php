@@ -45,7 +45,7 @@ require('config/config.php');
                       foreach($result as $value): ?>
                         <div class="col-md-4">
                             <div class="card card-widget">
-                                <div class="card-header text-center">
+                                <div class="card-header text-center text-uppercase">
                                     <h4><?= $value['title'] ?></h4>
                                 </div>
                                 
@@ -63,14 +63,19 @@ require('config/config.php');
                 ?>
                 
             </div>
+            <a id="back-to-top" href="#" class="btn btn-primary back-to-top" role="button" aria-label="Scroll to top">
+                <i class="fas fa-chevron-up"></i>
+            </a>
         </div><!-- /.container-fluid -->
         </section>
-        <footer class="main-footer" style="margin-left:0; !important">
-            <div class="float-right d-none d-sm-block">
-            <b>Version</b> 3.0.5
+        <footer class="main-footer mb-2" style="margin-left:0; !important">
+            <!-- To the right -->
+            <div class="container">
+                <div class="float-right d-none d-sm-inline">
+                    <a href="logout.php" class="btn btn-secondary">Logout</a>
+                </div>
+                <strong>Copyright &copy; 2022 <a href="#">A programmer</a>.</strong> All rights reserved.
             </div>
-            <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong> All rights
-            reserved.
         </footer>
     </div>
 <!-- jQuery -->
