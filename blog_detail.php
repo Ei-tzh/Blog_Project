@@ -73,7 +73,7 @@ require('config/config.php');
                                 <img class="img-fluid pad" src="admin/<?= $result['image'] ?>" alt="Photo">
                                 <p class="card-text"><?= $result['content']?></p>
                                 <h3>Comments</h3><hr>
-                                <a href="index.php" class="btn btn-default">Back</a>
+                                <a href="index.php?pageno=1" class="btn btn-default">Back</a>
                             </div>
                             
                             <!-- /.card-body -->
