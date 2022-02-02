@@ -14,10 +14,16 @@ require('config/config.php');
     $stmtcmt->execute();
     $cmResult=$stmtcmt->fetchAll();
     if($cmResult){
-        $authorID=$cmResult[0]['author_id'];
-        $stmtuser=$db->prepare("SELECT * FROM users WHERE id=$authorID");
-        $stmtuser->execute();
-        $userResult=$stmtuser->fetchAll();
+        $auresult=[];
+        foreach($cmResult as $key=>$value){
+            $authorID=$cmResult[$key]['author_id'];
+            $stmtuser=$db->prepare("SELECT * FROM users WHERE id=$authorID");
+            $stmtuser->execute();
+            $auresult[]=$stmtuser->fetch();
+        }
+        // print "<pre>";
+        // print_r($auresult[1]);
+        // exit();
     }
     
     // print_r($cmResult[0]['author_id']);
@@ -43,7 +49,7 @@ require('config/config.php');
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 3 | Widgets</title>
+  <title>Blog | Details</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Font Awesome -->
@@ -79,11 +85,11 @@ require('config/config.php');
                             <!-- /.card-body -->
                             <div class="card-footer card-comments">
                                 <?php if($cmResult):
-                                     foreach($cmResult as $value): ?>
+                                     foreach($cmResult as $key=>$value): ?>
                                     <div class="card-comment d-flex justify-content-between">
                                         <div class="comment-text">
                                             <i class="far fa-user"></i>
-                                            <span class="font-weight-bold ml-2 text-capitalize"><?= $userResult[0]['name'] ?>
+                                            <span class="font-weight-bold ml-2 text-capitalize"><?= $auresult[$key]['name'] ?>
                                             </span><!-- /.username -->
                                             <div style="margin-left:45px;">
                                                 <?= $value['content'] ?>
