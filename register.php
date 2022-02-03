@@ -15,11 +15,12 @@ require('config/config.php');
             echo "<script>alert('Already created account with this email!')</script>";
         }else{
             
-            $stmt=$db->prepare("INSERT INTO users(name,email,password) VALUES (:name,:email,:password)");
+            $stmt=$db->prepare("INSERT INTO users(name,email,password,role) VALUES (:name,:email,:password,:role)");
             $result=$stmt->execute([
               ':name'=>$name,
               ':email'=>$email,
               ':password'=>$password,
+              ':role'=>0,
             ]);
             if($result){
                 echo "<script>alert('Successfully Register.You can now login!');window.location.href='login.php';</script>";

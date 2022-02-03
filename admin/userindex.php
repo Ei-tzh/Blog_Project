@@ -3,18 +3,20 @@ require('../config/config.php');
   session_start();
   if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
     header('Location:login.php');
-  }else{
-    $userID=$_SESSION['user_id'];
-
-    $stmt=$db->prepare("SELECT * FROM users WHERE id=$userID");
-    $stmt->execute();
-    $result=$stmt->fetch();
-
-    if($result['role']==0){
-      echo "<script>alert('Sorry,Only Admin can enter!');window.location.href='login.php';</script>";
-    }
   }
-  //print_r($_SESSION);
+  if($_SESSION['role']!=1){
+    header('Location:login.php');
+  }
+  if (!empty($_POST['search'])) {
+    setcookie('search',$_POST['search'], time() + (86400 * 30), "/");
+    
+  }
+  else{
+    if (empty($_GET['pageno'])) {
+      unset($_COOKIE['search']); 
+      setcookie('search', null, -1, '/'); 
+    }
+  } 
 
 ?>
 
@@ -30,15 +32,17 @@ require('../config/config.php');
           </div>
           <!-- /.card-header -->
           <?php  
+
+            
             if(empty($_GET['pageno'])){
                 $pageno=1;
             }else{
                 $pageno=$_GET['pageno'];
             }
-            $numOfRec=4;
+            $numOfRec=3;
             $offset=($pageno-1)*$numOfRec;
 
-        if(empty($_POST)){
+            if (empty($_POST['search']) && empty($_COOKIE['search'])) {
             
             $stmt=$db->prepare("SELECT * FROM users ORDER BY id DESC");
             $stmt->execute();
@@ -49,7 +53,12 @@ require('../config/config.php');
             $stmtusers->execute();
             $resultusers=$stmtusers->fetchAll();
         }else{
-            $search=$_POST['search'];
+            $search= $_POST['search'] ? $_POST['search'] : $_COOKIE['search'];
+            // if(empty($_POST['search'])){
+            //   $search=$_COOKIE['search'];
+            // }else{
+            //   $search= $_POST['search'];
+            // }
             $stmt=$db->prepare("SELECT * FROM users WHERE name LIKE '%$search%' ORDER BY id DESC");
             $stmt->execute();
             $rawresultusers=$stmt->fetchAll();

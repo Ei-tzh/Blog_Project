@@ -3,16 +3,9 @@ require('../config/config.php');
   session_start();
   if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
     header('Location:login.php');
-  }else{
-    $userID=$_SESSION['user_id'];
-
-    $stmt=$db->prepare("SELECT * FROM users WHERE id=$userID");
-    $stmt->execute();
-    $result=$stmt->fetch();
-
-    if($result['role']==0){
-      echo "<script>alert('Sorry,Only Admin can enter!');window.location.href='login.php';</script>";
-    }
+  }
+  if($_SESSION['role']!=1){
+    header('Location:login.php');
   }
   //print_r($_SESSION);
 
