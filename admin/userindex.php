@@ -53,12 +53,12 @@ require('../config/config.php');
             $stmtusers->execute();
             $resultusers=$stmtusers->fetchAll();
         }else{
-            $search= $_POST['search'] ? $_POST['search'] : $_COOKIE['search'];
-            // if(empty($_POST['search'])){
-            //   $search=$_COOKIE['search'];
-            // }else{
-            //   $search= $_POST['search'];
-            // }
+            // $search= $_POST['search'] ? $_POST['search'] : $_COOKIE['search'];
+            if(empty($_POST['search'])){
+              $search=$_COOKIE['search'];
+            }else{
+              $search= $_POST['search'];
+            }
             $stmt=$db->prepare("SELECT * FROM users WHERE name LIKE '%$search%' ORDER BY id DESC");
             $stmt->execute();
             $rawresultusers=$stmt->fetchAll();

@@ -12,11 +12,21 @@ require('../config/config.php');
   $stmt->execute();
   $result=$stmt->fetch();
  if($_POST){
-     $id=$_POST['id'];
-     $title=$_POST['title'];
-     $content=$_POST['content'];
+  if(empty($_POST['title']) || empty($_POST['content'])  ){
+    if(empty($_POST['title'])){
+      
+      $titleError="Title Field is required!";
+    }
+    if(empty($_POST['content'])){
+      $contentError="Content Field is required!";
+    }
+    
+  }else{
+      $id=$_POST['id'];
+      $title=$_POST['title'];
+      $content=$_POST['content'];
      
-     if($_FILES['image']['name'] != null){
+      if($_FILES['image']['name'] != null){
         $files='images/'.$_FILES['image']['name'];
         $tmp=$_FILES['image']['tmp_name'];
         $imagetype=pathinfo($files,PATHINFO_EXTENSION);
@@ -47,7 +57,9 @@ require('../config/config.php');
             echo "<script>alert('Successfully Added!');window.location.href='index.php';</script>";
                 }
             }
-        }
+  }
+}  
+        
   
 ?>
 
@@ -64,16 +76,25 @@ require('../config/config.php');
                 <input type="hidden" name="id" value="<?php echo $result['id'] ?>">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
-                    <input type="text" name="title" id="title" class="form-control" value="<?php echo $result['title'] ?>" required>
+                    <input type="text" name="title" id="title" class="form-control <?php echo empty($titleError) ? '': 'is-invalid'; ?>" value="<?php echo $result['title'] ?>" >
+                    <div class="invalid-feedback">
+                        <?php echo empty($titleError) ? '': $titleError; ?>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="content" class="form-label">Content</label>
-                    <textarea name="content" class="form-control" id="content" cols="30" rows="10" required><?php echo $result['content'] ?></textarea>
+                    <textarea name="content" class="form-control <?php echo empty($contentError) ? '':'is-invalid'; ?>" id="content" cols="30" rows="10" ><?php echo $result['content'] ?></textarea>
+                    <div class="invalid-feedback">
+                        <?php echo empty($contentError) ? '': $contentError; ?>
+                    </div>
                 </div>
                 <div class="mb-3">
-                    <label for="image" class="form-label">Image</label><br>
+                    <label for="image" class="form-label <?php echo empty($imageError) ? '':'is-invalid'; ?>">Image</label><br>
                     <img src="<?php echo $result['image'] ?>" alt="" class="img-thumbnail w-25 h-25 mb-2">
                     <input class="form-control py-1" type="file" id="image" name="image">
+                    <div class="invalid-feedback">
+                        <?php echo empty($imageError) ? '': $imageError; ?>
+                    </div>
                 </div>
                 <input type="submit" value="Edit" class="btn btn-success">
                 <a href="index.php" class="btn btn-secondary">Back</a>

@@ -9,9 +9,21 @@ require('../config/config.php');
   }
   //print_r($_SESSION);
   if($_POST){
+    if(empty($_POST['title']) || empty($_POST['content']) || empty($_FILES['image']) ){
+      if(empty($_POST['title'])){
+        
+        $titleError="Title Field is required!";
+      }
+      if(empty($_POST['content'])){
+        $contentError="Content Field is required!";
+      }
+      if(empty($_FILES['image'])){
+        $imageError="Image Field is required!";
+      }
+    }else{
       $title=$_POST['title'];
       $content=$_POST['content'];
-
+  
       $files='images/'.$_FILES['image']['name'];
       $tmp=$_FILES['image']['tmp_name'];
       $imagetype=pathinfo($files,PATHINFO_EXTENSION);
@@ -31,6 +43,8 @@ require('../config/config.php');
             echo "<script>alert('Successfully Added!');window.location.href='index.php';</script>";
           }
       }
+    }
+    
   }
 ?>
 
@@ -46,15 +60,24 @@ require('../config/config.php');
             <form action="add.php" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
-                    <input type="text" name="title" id="title" class="form-control" required>
+                    <input type="text" name="title" id="title" class="form-control  <?php echo empty($titleError) ? '': 'is-invalid'; ?>" >
+                    <div class="invalid-feedback">
+                        <?php echo empty($titleError) ? '': $titleError; ?>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="content" class="form-label">Content</label>
-                    <textarea name="content" class="form-control" id="content" cols="30" rows="10" required></textarea>
+                    <textarea name="content" class="form-control <?php echo empty($contentError) ? '':'is-invalid'; ?>" id="content" cols="30" rows="10" ></textarea>
+                    <div class="invalid-feedback">
+                        <?php echo empty($contentError) ? '': $contentError; ?>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="image" class="form-label">Image</label>
-                    <input class="form-control py-1" type="file" id="image" name="image" required>
+                    <input class="form-control py-1 <?php echo empty($imageError) ? '':'is-invalid'; ?>" type="file" id="image" name="image" >
+                    <div class="invalid-feedback">
+                        <?php echo empty($imageError) ? '': $imageError; ?>
+                    </div>
                 </div>
                 <input type="submit" value="Add" class="btn btn-success">
                 <a href="index.php" class="btn btn-secondary">Back</a>
