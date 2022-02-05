@@ -1,6 +1,7 @@
 <?php
+session_start();
 require('config/config.php');
-     session_start();
+require('config/common.php');
      if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
        header('Location:login.php');
      }
@@ -110,6 +111,7 @@ require('config/config.php');
                             </div>
                             <div class="card-footer">
                                 <form action="" method="post">
+                                <input name="_token" type="hidden"  value="<?php echo $_SESSION['_token']; ?>">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text <?php echo empty($cmtError) ? '':'bg-danger'; ?> " id="basic-addon1"><i class="far fa-user"></i></span>

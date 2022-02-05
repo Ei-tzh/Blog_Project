@@ -1,8 +1,7 @@
 <?php
+session_start();
 require('../config/config.php');
 require('../config/common.php');
-
-  session_start();
 
   if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
     header('Location:login.php');
@@ -10,7 +9,7 @@ require('../config/common.php');
   if($_SESSION['role']!=1){
     header('Location:login.php');
   }
-  echo $_SESSION['_token'];
+  
   if($_POST){
     
     if(empty($_POST['title']) || empty($_POST['content']) || ($_FILES['image']['name']=="") ){

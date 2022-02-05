@@ -1,6 +1,8 @@
 <?php
-require('../config/config.php');
+
   session_start();
+  require('../config/config.php');
+  require('../config/common.php');
   if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
     header('Location:login.php');
   }
@@ -63,6 +65,7 @@ require('../config/config.php');
         <div class="card">
           <div class="card-body">
             <form action="useradd.php" method="post">
+            <input name="_token" type="hidden"  value="<?php echo $_SESSION['_token']; ?>">
                 <div class="mb-3">
                     <label for="name" class="form-label">User Name:</label>
                     <input type="text" name="name" id="name" class="form-control <?php echo empty($nameError) ? '': 'is-invalid'; ?>" >

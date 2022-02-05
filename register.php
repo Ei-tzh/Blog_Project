@@ -1,6 +1,7 @@
 <?php
 session_start();
 require('config/config.php');
+require('config/common.php');
     if($_POST){
       if(empty($_POST['name']) || empty($_POST['email']) || empty($_POST['pwd']) ||  strlen($_POST['pwd']) < 4){
      
@@ -78,6 +79,7 @@ require('config/config.php');
       <p class="login-box-msg">Register New Account</p>
 
       <form action="register.php" method="post">
+      <input name="_token" type="hidden"  value="<?php echo $_SESSION['_token']; ?>">
         <div class="input-group mb-3">
           <input type="text" class="form-control  <?php echo empty($nameError) ? '':'is-invalid'; ?>" placeholder="Username" name="name">
           <div class="input-group-append">
