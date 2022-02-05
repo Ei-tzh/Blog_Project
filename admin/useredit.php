@@ -88,14 +88,14 @@ $result=$stmt->fetch();
                 <input type="hidden" name="id" value="<?php echo $result['id']; ?>">
                 <div class="mb-3">
                     <label for="name" class="form-label">User Name:</label>
-                    <input type="text" name="name" id="name" class="form-control <?php echo empty($nameError) ? '':'is-invalid'; ?>" value="<?php echo $result['name']; ?>" >
+                    <input type="text" name="name" id="name" class="form-control <?php echo empty($nameError) ? '':'is-invalid'; ?>" value="<?php echo escape($result['name']); ?>" >
                     <div class="invalid-feedback">
                         <?php echo empty($nameError) ? '': $nameError; ?>
                     </div>
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Enter Email:</label>
-                    <input type="email" class="form-control <?php echo empty($emailError) ? '':'is-invalid'; ?>" name="email" id="email" value="<?php echo $result['email']; ?>" >
+                    <input type="email" class="form-control <?php echo empty($emailError) ? '':'is-invalid'; ?>" name="email" id="email" value="<?php echo escape($result['email']); ?>" >
                     <div class="invalid-feedback">
                         <?php echo empty($emailError) ? '': $emailError; ?>
                     </div>
@@ -109,7 +109,7 @@ $result=$stmt->fetch();
                     </div>
                 </div>
                 <div class="form-check mb-5">
-                    <input class="form-check-input" type="checkbox" value="1" id="role" name="role" <?php echo ($result['role']==1?'checked':''); ?>>
+                    <input class="form-check-input" type="checkbox" value="1" id="role" name="role" <?php echo (escape($result['role'])==1?'checked':''); ?>>
                     <label class="form-check-label" for="role">
                         <b>Role</b>
                     </label>

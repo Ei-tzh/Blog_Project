@@ -1,5 +1,6 @@
 <?php
 require('../config/config.php');
+require('../config/common.php');
   session_start();
   if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
     header('Location:login.php');
@@ -76,11 +77,11 @@ require('../config/config.php');
                         foreach($result as $value): ?>
                           <tr>
                             <td><?= $i ?></td>
-                            <td><?= $value['title'] ?></td>
-                            <td><?= substr($value['content'],0,50) ?></td>
+                            <td><?= escape($value['title'])?></td>
+                            <td><?= escape(substr($value['content'],0,50)) ?></td>
                             <td>
-                              <a href="edit.php?id=<?= $value['id'] ?>" class="btn btn-primary">Edit</a>
-                              <a href="delete.php?id=<?= $value['id'] ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
+                              <a href="edit.php?id=<?= escape($value['id']) ?>" class="btn btn-primary">Edit</a>
+                              <a href="delete.php?id=<?= escape($value['id']) ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
                             </td>
                           </tr>
                   <?php

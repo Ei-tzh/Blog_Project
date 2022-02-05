@@ -79,11 +79,11 @@ require('config/common.php');
                         <!-- Box Comment -->
                         <div class="card card-widget">
                             <div class="card-header text-center">
-                                <h4><?= $result['title'] ?></h4>
+                                <h4><?= escape($result['title']) ?></h4>
                             </div>
                             <div class="card-body">
-                                <img class="img-fluid pad" src="admin/<?= $result['image'] ?>" alt="Photo">
-                                <p class="card-text"><?= $result['content']?></p>
+                                <img class="img-fluid pad" src="admin/<?= escape($result['image']) ?>" alt="Photo">
+                                <p class="card-text"><?= escape($result['content'])?></p>
                                 <h3>Comments</h3><hr>
                                 <a href="index.php?pageno=1" class="btn btn-default">Back</a>
                             </div>
@@ -95,10 +95,10 @@ require('config/common.php');
                                     <div class="card-comment d-flex justify-content-between">
                                         <div class="comment-text">
                                             <i class="far fa-user"></i>
-                                            <span class="font-weight-bold ml-2 text-capitalize"><?= $auresult[$key]['name'] ?>
+                                            <span class="font-weight-bold ml-2 text-capitalize"><?= escape($auresult[$key]['name']) ?>
                                             </span><!-- /.username -->
                                             <div style="margin-left:45px;">
-                                                <?= $value['content'] ?>
+                                                <?= escape($value['content']) ?>
                                             </div> 
                                         </div>
                                         <div class="text-muted datetime"><?= $value['created_at'] ?></div>

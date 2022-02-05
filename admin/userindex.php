@@ -1,5 +1,6 @@
 <?php
 require('../config/config.php');
+require('../config/common.php');
   session_start();
   if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
     header('Location:login.php');
@@ -95,12 +96,12 @@ require('../config/config.php');
                   ?>
                     <tr>
                         <td><?= $i ?></td>
-                        <td><?= $value['name'] ?></td>
-                        <td><?= $value['email']  ?></td>
-                        <td><?=  $value['role']==1?'Admin':'User' ?></td>
+                        <td><?= escape($value['name']) ?></td>
+                        <td><?= escape($value['email'])  ?></td>
+                        <td><?=  escape($value['role'])==1?'Admin':'User' ?></td>
                         <td>
-                        <a href="useredit.php?id=<?= $value['id'] ?>" class="btn btn-outline-primary">Edit</a>
-                        <a href="userdelete.php?id=<?= $value['id'] ?>" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
+                        <a href="useredit.php?id=<?= escape($value['id']) ?>" class="btn btn-outline-primary">Edit</a>
+                        <a href="userdelete.php?id=<?= escape($value['id']) ?>" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
                         </td>
                     </tr>
                 <?php

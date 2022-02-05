@@ -79,21 +79,21 @@ require('../config/common.php');
                 <input type="hidden" name="id" value="<?php echo $result['id'] ?>">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
-                    <input type="text" name="title" id="title" class="form-control <?php echo empty($titleError) ? '': 'is-invalid'; ?>" value="<?php echo $result['title'] ?>" >
+                    <input type="text" name="title" id="title" class="form-control <?php echo empty($titleError) ? '': 'is-invalid'; ?>" value="<?php echo escape($result['title']) ?>" >
                     <div class="invalid-feedback">
                         <?php echo empty($titleError) ? '': $titleError; ?>
                     </div>
                 </div>
                 <div class="mb-3">
                     <label for="content" class="form-label">Content</label>
-                    <textarea name="content" class="form-control <?php echo empty($contentError) ? '':'is-invalid'; ?>" id="content" cols="30" rows="10" ><?php echo $result['content'] ?></textarea>
+                    <textarea name="content" class="form-control <?php echo empty($contentError) ? '':'is-invalid'; ?>" id="content" cols="30" rows="10" ><?php echo escape($result['content']) ?></textarea>
                     <div class="invalid-feedback">
                         <?php echo empty($contentError) ? '': $contentError; ?>
                     </div>
                 </div>
                 <div class="mb-3">
                     <label for="image" class="form-label <?php echo empty($imageError) ? '':'is-invalid'; ?>">Image</label><br>
-                    <img src="<?php echo $result['image'] ?>" alt="" class="img-thumbnail w-25 h-25 mb-2">
+                    <img src="<?php echo escape($result['image']) ?>" alt="" class="img-thumbnail w-25 h-25 mb-2">
                     <input class="form-control py-1" type="file" id="image" name="image">
                     <div class="invalid-feedback">
                         <?php echo empty($imageError) ? '': $imageError; ?>
