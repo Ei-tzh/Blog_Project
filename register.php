@@ -19,7 +19,7 @@ require('config/config.php');
       }else{
         $name=$_POST['name'];
         $email=$_POST['email'];
-        $password=$_POST['pwd'];
+        $password=password_hash($_POST['pwd'],PASSWORD_DEFAULT);
 
         $statement=$db->prepare('SELECT * FROM users WHERE email=:email');
         $statement->bindValue(':email',$email);

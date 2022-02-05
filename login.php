@@ -11,7 +11,7 @@ require('config/config.php');
 
         $user=$statement->fetch(PDO::FETCH_ASSOC);
         if($user){
-            if($user['password'] == $password){
+          if( password_verify($_POST['pwd'],$user['password'])){
                 $_SESSION['user_id']=$user['id'];
                 $_SESSION['username']=$user['name'];
                 $_SESSION['role']=0;
