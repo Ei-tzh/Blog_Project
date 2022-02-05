@@ -1,14 +1,18 @@
 <?php
 require('../config/config.php');
+require('../config/common.php');
+
   session_start();
+
   if(empty($_SESSION['user_id']) && empty($_SESSION['logged_in'])){
     header('Location:login.php');
   }
   if($_SESSION['role']!=1){
     header('Location:login.php');
   }
-  //print_r($_SESSION);
+  echo $_SESSION['_token'];
   if($_POST){
+    
     if(empty($_POST['title']) || empty($_POST['content']) || ($_FILES['image']['name']=="") ){
       if(empty($_POST['title'])){
         
@@ -58,6 +62,7 @@ require('../config/config.php');
         <div class="card">
           <div class="card-body">
             <form action="add.php" method="post" enctype="multipart/form-data">
+            <input name="_token" type="hidden"  value="<?php echo $_SESSION['_token']; ?>">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
                     <input type="text" name="title" id="title" class="form-control  <?php echo empty($titleError) ? '': 'is-invalid'; ?>" >
