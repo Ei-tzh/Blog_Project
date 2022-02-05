@@ -9,7 +9,7 @@ require('../config/config.php');
   }
   //print_r($_SESSION);
   if($_POST){
-    if(empty($_POST['title']) || empty($_POST['content']) || empty($_FILES['image']) ){
+    if(empty($_POST['title']) || empty($_POST['content']) || ($_FILES['image']['name']=="") ){
       if(empty($_POST['title'])){
         
         $titleError="Title Field is required!";
@@ -17,7 +17,7 @@ require('../config/config.php');
       if(empty($_POST['content'])){
         $contentError="Content Field is required!";
       }
-      if(empty($_FILES['image'])){
+      if( $_FILES['image']['name']==""){
         $imageError="Image Field is required!";
       }
     }else{

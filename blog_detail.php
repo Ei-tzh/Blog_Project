@@ -31,17 +31,22 @@ require('config/config.php');
     
 
     if($_POST){
-        $comment=$_POST['comment'];
+        if(empty($_POST['comment'])){
+            $cmtError="Comment cannot be null.";
+        }else{
+            $comment=$_POST['comment'];
 
-        $stmt=$db->prepare("INSERT INTO comments(content,author_id,post_id) VALUES (:content,:author_id,:post_id)");
-        $result=$stmt->execute([
-            ":content"=>$comment,
-            ":author_id"=>$_SESSION['user_id'],
-            ":post_id"=>$blogid,
-        ]);
-        if($result){
-            header('Location:blog_detail.php?id='.$blogid);
+            $stmt=$db->prepare("INSERT INTO comments(content,author_id,post_id) VALUES (:content,:author_id,:post_id)");
+            $result=$stmt->execute([
+                ":content"=>$comment,
+                ":author_id"=>$_SESSION['user_id'],
+                ":post_id"=>$blogid,
+            ]);
+            if($result){
+                header('Location:blog_detail.php?id='.$blogid);
+            }
         }
+        
     }
 ?>
 <!DOCTYPE html>
@@ -107,9 +112,12 @@ require('config/config.php');
                                 <form action="" method="post">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon1"><i class="far fa-user"></i></span>
+                                            <span class="input-group-text <?php echo empty($cmtError) ? '':'bg-danger'; ?> " id="basic-addon1"><i class="far fa-user"></i></span>
                                         </div>
-                                        <input type="text" name="comment" class="form-control " placeholder="Press enter to post comment">
+                                        <input type="text" name="comment" class="form-control  <?php echo empty($cmtError) ? '':'is-invalid'; ?> " placeholder="Press enter to post comment">
+                                        <div class="invalid-feedback">
+                                            <?php echo empty($cmtError) ? '': $cmtError; ?>
+                                        </div>
                                     </div>
                                 </form>
                             </div>

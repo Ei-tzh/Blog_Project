@@ -2,6 +2,21 @@
 session_start();
 require('config/config.php');
     if($_POST){
+      if(empty($_POST['name']) || empty($_POST['email']) || empty($_POST['pwd']) ||  strlen($_POST['pwd']) < 4){
+     
+        if(empty($_POST['name'])){
+          $nameError="Name cannot be null.";
+        }
+        if(empty($_POST['email'])){
+          $emailError="Email cannot be null.";
+        }
+        if(empty($_POST['pwd'])){
+          $passwordError="Password cannot be null";
+        }
+        if(strlen($_POST['pwd']) < 4){
+          $passwordError = 'Password should be 4 characters at least';
+        } 
+      }else{
         $name=$_POST['name'];
         $email=$_POST['email'];
         $password=$_POST['pwd'];
@@ -26,6 +41,9 @@ require('config/config.php');
                 echo "<script>alert('Successfully Register.You can now login!');window.location.href='login.php';</script>";
             }
         }
+
+      }
+        
     }
 
 ?>
@@ -61,27 +79,36 @@ require('config/config.php');
 
       <form action="register.php" method="post">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Username" name="name">
+          <input type="text" class="form-control  <?php echo empty($nameError) ? '':'is-invalid'; ?>" placeholder="Username" name="name">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
             </div>
           </div>
+          <div class="invalid-feedback">
+            <?php echo empty($nameError) ? '': $nameError; ?>
+          </div>
         </div>
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email" name="email">
+          <input type="email" class="form-control  <?php echo empty($emailError) ? '':'is-invalid'; ?>" placeholder="Email" name="email">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
             </div>
           </div>
+          <div class="invalid-feedback">
+            <?php echo empty($emailError) ? '': $emailError; ?>
+          </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password" name="pwd">
+          <input type="password" class="form-control  <?php echo empty($passwordError) ? '':'is-invalid'; ?>" placeholder="Password" name="pwd">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
             </div>
+          </div>
+          <div class="invalid-feedback">
+            <?php echo empty($passwordError) ? '': $passwordError; ?>
           </div>
         </div>
         <div class="row">
