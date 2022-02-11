@@ -10,7 +10,16 @@ require('../config/common.php');
     header('Location:login.php');
   }
   //print_r($_SESSION);
-
+  if (!empty($_POST['search'])) {
+    setcookie('search',$_POST['search'], time() + (86400 * 30), "/");
+    
+  }
+  else{
+    if (empty($_GET['pageno'])) {
+      unset($_COOKIE['search']); 
+      setcookie('search', null, -1, '/'); 
+    }
+  } 
 ?>
 
 <?php include('header.php'); ?>
@@ -34,7 +43,7 @@ require('../config/common.php');
               $num_of_rec=2;
               $offset=($pageno-1)*$num_of_rec;
 
-              if(empty($_POST['search'])){
+            if (empty($_POST['search']) && empty($_COOKIE['search'])) {
                 $stmt=$db->prepare('SELECT * FROM posts ORDER BY id DESC');
                 $stmt->execute();
                 $rawresult=$stmt->fetchALL();
@@ -44,8 +53,11 @@ require('../config/common.php');
                 $stmt->execute();
                 $result=$stmt->fetchALL();
               }else{
-                $searchkey=$_POST['search'];
-                
+                if(empty($_POST['search'])){
+                  $searchkey=$_COOKIE['search'];
+                }else{
+                  $searchkey= $_POST['search'];
+                }
                 $stmt=$db->prepare("SELECT * FROM posts WHERE title LIKE '%$searchkey%' ORDER BY id DESC");
                 $stmt->execute();
                 $rawresult=$stmt->fetchALL();
